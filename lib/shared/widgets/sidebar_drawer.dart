@@ -62,6 +62,14 @@ class SideDrawer extends StatelessWidget {
             onTap: () {
               Get.offAndToNamed("/aboutus");
             },
+          ),          ListTile(
+            leading: const Icon(
+              Icons.present_to_all,
+            ),
+            title: const Text('Products'),
+            onTap: () {
+              Get.offAndToNamed("/products");
+            },
           ),
           ListTile(
             leading: Obx(() => Switch(

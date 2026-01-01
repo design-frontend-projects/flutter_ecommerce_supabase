@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce_supabase_supabase/screens/auth/login.dart';
-import 'package:flutter_ecommerce_supabase_supabase/screens/home.dart';
 import 'package:flutter_ecommerce_supabase_supabase/shared/i18n/app_translations.dart';
+import 'package:flutter_ecommerce_supabase_supabase/shared/widgets/layout/onboarding_intro.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:get_storage/get_storage.dart';
@@ -41,8 +41,8 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       translations: AppTranslations(),
-      locale: Locale("ar"),
-      fallbackLocale: Locale("ar"),
+      locale: Locale("en"),
+      fallbackLocale: Locale("en"),
 
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -54,9 +54,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: "/auth/login",
+      initialRoute: "/onboarding",
       getPages: appRoutes,
-      home: SafeArea(child: Login()),
+      home: SafeArea(child: OnboardingIntro()),
     );
   }
 }

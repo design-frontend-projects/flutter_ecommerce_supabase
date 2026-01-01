@@ -1,28 +1,28 @@
 
 class ItemsModel {
-  final int itemId;
+  final int product_id;
   final String name;
-  final double price;
+  final double base_price;
 
   ItemsModel({
-    required this.itemId,
+    required this.product_id,
     required this.name,
-    required this.price,
+    required this.base_price,
   });
 
   factory ItemsModel.fromJson(Map<String, dynamic> json) {
     return ItemsModel(
-      itemId: json['item_id'],
+      product_id: json['product_id'],
       name: json['name'] as String,
-      price: json['price'] is double ? json['price'] : json['price'] is int ? json['price'].toDouble() : double.parse(json['price'].toString()),
+      base_price: json['base_price'] is double ? json['base_price'] : json['base_price'] is int ? json['base_price'].toDouble() : double.parse(json['base_price'].toString()),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'item_id': itemId,
+      'product_id': product_id,
       'name': name,
-      'price': price,
+      'base_price': base_price,
     };
   }
 }

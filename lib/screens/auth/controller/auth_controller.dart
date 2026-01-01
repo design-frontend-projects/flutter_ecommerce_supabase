@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 class AuthController extends GetxController {
   final isLoading = false.obs;
   final GetStorage storage = GetStorage();
+  final RxBool isLogedIn = false.obs;
 
   Future<void> login(String email, String password) async {
     isLoading.value = true;
@@ -12,16 +13,20 @@ class AuthController extends GetxController {
         email: email,
         password: password
       );
+      print("##### login data #####");
+      print(loginRes);
 
       // TODO: Implement actual login logic
       await Future.delayed(const Duration(seconds: 2));
       if (loginRes.user != null) {
         print("Login success: $email");
         storage.write("isLoggedIn", "true");
-        Get.offAllNamed('/home'); // Navigate to home on success
+        isLogedIn.value = true;
+        Get.offAllNamed('/'); // Navigate to home on success
       }
     } catch (e) {
       storage.write("isLoggedIn", "false");
+      isLogedIn.value = false;
       Get.snackbar("Error", "Login failed");
     } finally {
       isLoading.value = false;

@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_supabase_supabase/screens/auth/controller/auth_controller.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class CheckLoginGuard extends GetMiddleware {
-  @override
-  int get priority => 1;
-  final GetStorage storage = GetStorage();
+  // @override
+  // int get priority => 1;
 
   @override
   RouteSettings? redirect(String? route) {
+    final authController = Get.put(AuthController(), permanent: true);
+    final GetStorage storage = GetStorage();
+
     // Read the value from storage
-    // If it's stored as "true" or "false" (strings)
-    final String? isLoggedIn = storage.read('isLoggedIn');
-    
-    // If it is stored as boolean in some places (safety check), try to read as dynamic
+    // Handle potential different types (bool, string, null)
     final dynamic rawValue = storage.read('isLoggedIn');
-    
     bool isLogin = false;
 
     if (rawValue is bool) {
@@ -23,28 +22,27 @@ class CheckLoginGuard extends GetMiddleware {
     } else if (rawValue is String) {
       isLogin = rawValue == 'true';
     }
+    print("CheckLoginGuard: route: $route, isLoggedIn: $isLogin");
 
-    print("is logged in *****: $isLogin");
-    
-    // If the user is not logged in, redirect to login page
-    // BUT avoid redirecting if we are already going to the login page or auth pages
-    // to prevent loops if this middleware is applied globally or incorrectly.
-    // However, usually this middleware is applied to protected routes like '/home'.
-    
-    if (!isLogin) {
-       return const RouteSettings(name: '/auth/login');
+    // Allow access to auth routes
+    if (route != null && (route == '/auth/login' || route.startsWith('/auth/'))) {
+      return null;
+    } else {
+      // If not logged in, redirect to auth/login
+      if (!isLogin || !authController.isLoading.value) {
+        print("***** User not logged in ($isLogin). Redirecting to /auth/login");
+        return RouteSettings(name: '/auth/login');
+      } else {
+        return null;
+      }
     }
-    
     return null;
   }
 
   @override
-  Widget onPageBuilt(Widget page) {
+  GetPage? onPageCalled(GetPage? page) {
+    // Log navigation attempts for security auditing
+    print("page called: ${page!.name} + ${page.page}");
     return page;
-  }
-
-  @override
-  void onPageDispose() {
-    print('PageDisposed');
   }
 }

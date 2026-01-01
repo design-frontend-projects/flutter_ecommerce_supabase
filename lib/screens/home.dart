@@ -27,6 +27,7 @@ class _HomeState extends State<Home> {
     super.initState();
     // Set up the stream to listen to employees table
     _employeeStream = SupabaseClientInit.supabaseInstance().client
+      .schema("public")
       .from('products')
       .stream(primaryKey: ['product_id'])
       .order('name', ascending: true);
@@ -106,7 +107,7 @@ class _HomeState extends State<Home> {
                 child: Column(
                   children: [
                     Flexible(child: Row(children: [Text("Name: ${item.name} ")],),),
-                    Row(children: [Text("Price: ${item.price}")],),
+                    Row(children: [Text("Price: ${item.base_price}")],),
                   ],
                 ),
               );
