@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ecommerce_supabase_supabase/screens/auth/login.dart';
+import 'package:flutter_ecommerce_supabase_supabase/screens/home.dart';
 import 'package:flutter_ecommerce_supabase_supabase/shared/i18n/app_translations.dart';
-import 'package:flutter_ecommerce_supabase_supabase/shared/widgets/layout/onboarding_intro.dart';
 import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:get_storage/get_storage.dart';
@@ -29,6 +28,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter ecommerce',
       debugShowMaterialGrid: false,
       debugShowCheckedModeBanner: false,
+      enableLog: false,
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
         textTheme: TextTheme(
@@ -54,9 +54,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      initialRoute: "/onboarding",
+      initialRoute: "/",
       getPages: appRoutes,
-      home: SafeArea(child: OnboardingIntro()),
+      home: SafeArea(child: Home()),
     );
   }
 }

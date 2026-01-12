@@ -17,13 +17,12 @@ import 'package:flutter_ecommerce_supabase_supabase/store/middleware/check_login
 import 'package:get/get.dart';
 
 final List<GetPage> appRoutes = [
-  GetPage(name: '/onboarding', page: () => const OnboardingIntro()),
   GetPage(
     name: '/',
     page: () => const Home(),
     binding: HomeBindings(),
-    middlewares: [CheckLoginGuard()],
   ),
+  GetPage(name: '/onboarding', page: () => const OnboardingIntro()),
   GetPage(
     name: '/auth/login',
     page: () => const Login(),
