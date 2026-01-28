@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce_supabase/presentation/views/splash_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,7 +16,7 @@ void main() async {
   await GetStorage.init();
 
   // Initialize services
-  final storageService = StorageService();
+  final storageService = await StorageService().init();
   Get.put<StorageService>(storageService, permanent: true);
 
   final supabaseService = SupabaseService();
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
         return GetMaterialApp(
           title: 'E-Shop',
           debugShowCheckedModeBanner: false,
+          debugShowMaterialGrid: false,
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
           themeMode: ThemeMode.system,
@@ -45,6 +47,7 @@ class MyApp extends StatelessWidget {
           getPages: AppPages.routes,
           initialBinding: InitialBinding(),
           defaultTransition: Transition.cupertino,
+          home: SplashView(),
         );
       },
     );
