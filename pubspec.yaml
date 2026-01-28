@@ -1,4 +1,4 @@
-name: flutter_ecommerce_supabase_supabase
+name: flutter_ecommerce_supabase
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.2
+  sdk: ^3.10.1
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -34,62 +34,61 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  get: ^5.0.0-release-candidate-9.3.0
+
+  # Supabase - Backend as a Service
+  supabase_flutter: ^2.8.0
+
+  # GetX - State management, routing, dependency injection
+  get: ^4.6.6
+
+  # GetStorage - Local key-value storage
   get_storage: ^2.1.1
-  dio: ^5.8.0+1
-  introduction_screen: ^3.1.17
-  supabase_flutter: ^2.9.0
-  flutter_launcher_icons: ^0.14.4
-  path: ^1.9.1
-  animated_text_kit: ^4.2.3
-  flutter_native_splash: ^2.4.6
-  onesignal_flutter: ^5.3.0
-  flutter_sliding_up_panel: ^2.1.1
-  local_auth: ^2.3.0
-  permission_handler: ^12.0.0+1
-#  device_info_plus: ^11.4.0
-  flutter_inappwebview: ^6.1.5
-  flutter_expandable_fab: ^2.5.0
-  validators: ^3.0.0
-  flutter_slidable: ^4.0.0
-  flutter_svg_icons: ^0.0.1+4
-  freezed_annotation: ^2.4.1
-  json_annotation: ^4.8.1
-  path_provider: ^2.1.5
-  lottie: ^3.3.1
-  cached_network_image: ^3.4.1
-  pinput: ^6.0.1
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-  build_runner: ^2.5.4
-  awesome_notifications: ^0.10.1
-  flutter_phone_direct_caller: ^2.2.1
-  sizer: ^3.1.3
-  flutter_screenutil: ^5.9.3
-  connectivity_plus: ^7.0.0
-  flutter_hooks: ^0.21.3+1
-#  flutter_secure_storage: ^4.2.1
-  modal_bottom_sheet: ^3.0.0
-  image_picker: ^1.2.1
+
+  # Form handling
   flutter_form_builder: ^10.2.0
-  form_builder_validators: ^11.2.0
+  form_builder_validators: ^11.0.0
+
+  # Biometric authentication
+  local_auth: ^2.3.0
+
+  # Modal bottom sheets
+  modal_bottom_sheet: ^3.0.0
+
+  # Responsive utilities
+  flutter_screenutil: ^5.9.0
+
+  # Image caching
+  cached_network_image: ^3.4.0
+
+  # Loading skeletons
+  shimmer: ^3.0.0
+
+  # Infinite scroll pagination
+  infinite_scroll_pagination: ^4.0.0
+
+  # Environment variables
+  flutter_dotenv: ^5.1.0
+
+  # Connectivity check
+  connectivity_plus: ^6.0.0
+
+  # URL launcher
+  url_launcher: ^6.2.0
+
 
 dev_dependencies:
-  freezed: ^2.4.6
-  json_serializable: ^6.7.1
   flutter_test:
     sdk: flutter
-
-dependency_overrides:
-  intl: ^0.17.0
-  http_parser: ^4.0.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+
+  # Build runner for code generation
+  build_runner: ^2.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -132,15 +131,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-
-
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  image_path: "assets/icons/icon.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  web:
-    generate: true
-    image_path: "assets/icons/icon.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"

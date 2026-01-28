@@ -1,4 +1,4 @@
-# flutter_ecommerce_supabase_supabase
+# flutter_ecommerce_supabase
 
 A new Flutter project.
 
