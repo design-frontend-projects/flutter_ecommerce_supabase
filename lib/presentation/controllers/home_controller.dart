@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constants/app_constants.dart';
@@ -47,67 +48,58 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
-  /// Load products with pagination
-  Future<void> loadProducts({bool refresh = false}) async {
-    if (_isLoading.value) return;
+  StreamSubscription<List<ProductModel>>? _productsSubscription;
+
+  /// Subscribe to products stream
+  void loadProducts({bool refresh = false}) {
+    if (_isSearching.value && _searchQuery.value.isNotEmpty) {
+      _performSearch(_searchQuery.value);
+      return;
+    }
 
     if (refresh) {
-      _currentPage.value = 0;
-      _hasMore.value = true;
+      _products.clear();
     }
 
     _isLoading.value = true;
     _errorMessage.value = '';
 
-    try {
-      final newProducts = await _productRepository.getProducts(
-        page: _currentPage.value,
-        limit: AppConstants.pageSize,
-      );
-
-      if (refresh) {
-        _products.clear();
-      }
-
-      _products.addAll(newProducts);
-      _hasMore.value = newProducts.length >= AppConstants.pageSize;
-      _currentPage.value++;
-    } catch (e) {
-      _errorMessage.value = e.toString();
-    } finally {
-      _isLoading.value = false;
-    }
+    _productsSubscription?.cancel();
+    _productsSubscription = _productRepository.streamProducts().listen(
+      (newProducts) {
+        _products.assignAll(newProducts);
+        _hasMore.value = false; // Stream updates replace manual pagination
+        _isLoading.value = false;
+      },
+      onError: (error) {
+        _errorMessage.value = error.toString();
+        _isLoading.value = false;
+      },
+    );
   }
 
-  /// Load more products (pagination)
+  /// Load more products (pagination) - currently disabled for streams
   Future<void> loadMore() async {
+    // If searching, we could implement pagination.
+    // For streams, we get real-time updates of all matched so pagination is omitted here for simplicity.
     if (_isLoadingMore.value || !_hasMore.value) return;
 
-    _isLoadingMore.value = true;
-
-    try {
-      List<ProductModel> newProducts;
-
-      if (_searchQuery.value.isNotEmpty) {
-        newProducts = await _productRepository.searchProducts(
+    if (_isSearching.value && _searchQuery.value.isNotEmpty) {
+      _isLoadingMore.value = true;
+      try {
+        final newProducts = await _productRepository.searchProducts(
           query: _searchQuery.value,
           page: _currentPage.value,
           limit: AppConstants.pageSize,
         );
-      } else {
-        newProducts = await _productRepository.getProducts(
-          page: _currentPage.value,
-          limit: AppConstants.pageSize,
-        );
+        _products.addAll(newProducts);
+        _hasMore.value = newProducts.length >= AppConstants.pageSize;
+        _currentPage.value++;
+      } catch (e) {
+        _errorMessage.value = e.toString();
+      } finally {
+        _isLoadingMore.value = false;
       }
-
-      _products.addAll(newProducts);
-      _hasMore.value = newProducts.length >= AppConstants.pageSize;
-      _currentPage.value++;
-    } catch (e) {
-      _errorMessage.value = e.toString();
-    } finally {
-      _isLoadingMore.value = false;
     }
   }
 
@@ -185,11 +177,11 @@ class HomeController extends GetxController {
   }
 
   /// Refresh products
-  Future<void> refresh() async {
+  Future<void> refreshData() async {
     if (_searchQuery.value.isNotEmpty) {
       await _performSearch(_searchQuery.value);
     } else {
-      await loadProducts(refresh: true);
+      loadProducts(refresh: true);
     }
   }
 }

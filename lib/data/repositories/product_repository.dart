@@ -39,6 +39,47 @@ class ProductRepository {
     }
   }
 
+  /// Stream products with real-time updates
+  Stream<List<ProductModel>> streamProducts({
+    int? categoryId,
+    bool activeOnly = true,
+  }) {
+    Stream<List<Map<String, dynamic>>> stream;
+
+    if (categoryId != null) {
+      stream = _supabase
+          .from(SupabaseConstants.productsTable)
+          .stream(primaryKey: ['product_id'])
+          .eq('category_id', categoryId);
+    } else if (activeOnly) {
+      stream = _supabase
+          .from(SupabaseConstants.productsTable)
+          .stream(primaryKey: ['product_id'])
+          .eq('is_active', true);
+    } else {
+      stream = _supabase
+          .from(SupabaseConstants.productsTable)
+          .stream(primaryKey: ['product_id']);
+    }
+
+    return stream.map((list) {
+      var products = list.map((e) => ProductModel.fromJson(e)).toList();
+
+      // Since Supabase streams only support one filter, we apply the second one locally
+      if (categoryId != null && activeOnly) {
+        products = products.where((p) => p.isActive).toList();
+      }
+
+      // Sort by created_at descending
+      products.sort(
+        (a, b) => (b.createdAt ?? DateTime.now()).compareTo(
+          a.createdAt ?? DateTime.now(),
+        ),
+      );
+      return products;
+    });
+  }
+
   /// Search products with server-side filtering
   Future<List<ProductModel>> searchProducts({
     required String query,

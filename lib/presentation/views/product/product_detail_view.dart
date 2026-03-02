@@ -56,16 +56,18 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     final favoritesController = Get.find<FavoritesController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    if (isLoading)
+    if (isLoading) {
       return Scaffold(
         appBar: AppBar(),
         body: const Center(child: CircularProgressIndicator()),
       );
-    if (error != null || product == null)
+    }
+    if (error != null || product == null) {
       return Scaffold(
         appBar: AppBar(),
         body: Center(child: Text(error ?? 'Product not found')),
       );
+    }
 
     return Scaffold(
       body: CustomScrollView(

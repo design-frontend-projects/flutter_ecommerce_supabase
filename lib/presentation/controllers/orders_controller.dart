@@ -173,7 +173,7 @@ class OrdersController extends GetxController {
   }
 
   /// Refresh orders
-  Future<void> refresh() async {
+  Future<void> refreshOrders() async {
     await loadOrders(refresh: true);
   }
 

@@ -16,7 +16,7 @@ class OrdersView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('My Orders'), centerTitle: false),
       body: RefreshIndicator(
-        onRefresh: ordersController.refresh,
+        onRefresh: ordersController.refreshOrders,
         child: Obx(() {
           if (ordersController.isLoading && !ordersController.hasOrders) {
             return const Center(child: CircularProgressIndicator());

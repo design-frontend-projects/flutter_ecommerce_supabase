@@ -1,8 +1,8 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../controllers/home_controller.dart';
 import '../../../controllers/cart_controller.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../../routes/app_routes.dart';
 
 /// Search-enabled AppBar for home view
@@ -21,14 +21,45 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       if (homeController.isSearching) {
         return _buildSearchAppBar(context, homeController, isDark);
       }
-      return _buildNormalAppBar(context, homeController);
+      return _buildNormalAppBar(context, homeController, isDark);
     });
   }
 
-  AppBar _buildNormalAppBar(BuildContext context, HomeController controller) {
+  Widget _buildGlassmorphicBackground(bool isDark) {
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          color: isDark
+              ? Colors.black.withAlpha(100)
+              : Colors.white.withAlpha(150),
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.white.withAlpha(isDark ? 30 : 100),
+                width: 1,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  AppBar _buildNormalAppBar(
+    BuildContext context,
+    HomeController controller,
+    bool isDark,
+  ) {
     return AppBar(
-      title: const Text('E-Shop'),
+      title: const Text(
+        'E-Shop',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       centerTitle: false,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      flexibleSpace: _buildGlassmorphicBackground(isDark),
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
@@ -36,6 +67,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
           tooltip: 'Search products',
         ),
         _CartBadge(),
+        const SizedBox(width: 8),
       ],
     );
   }
@@ -46,22 +78,36 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
     bool isDark,
   ) {
     return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      flexibleSpace: _buildGlassmorphicBackground(isDark),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: controller.closeSearch,
       ),
-      title: TextField(
-        controller: controller.searchController,
-        autofocus: true,
-        onChanged: controller.onSearchChanged,
-        style: Theme.of(context).textTheme.bodyLarge,
-        decoration: InputDecoration(
-          hintText: 'Search products...',
-          border: InputBorder.none,
-          hintStyle: TextStyle(
-            color: isDark
-                ? AppColors.textSecondaryDark
-                : AppColors.textSecondary,
+      title: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: isDark
+              ? Colors.white.withAlpha(20)
+              : Colors.black.withAlpha(10),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextField(
+          controller: controller.searchController,
+          autofocus: true,
+          onChanged: controller.onSearchChanged,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: isDark ? Colors.white : Colors.black87,
+          ),
+          decoration: InputDecoration(
+            hintText: 'Search products...',
+            border: InputBorder.none,
+            isDense: true,
+            hintStyle: TextStyle(
+              color: isDark ? Colors.white54 : Colors.black54,
+            ),
           ),
         ),
       ),
@@ -77,6 +123,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
           );
         }),
         _CartBadge(),
+        const SizedBox(width: 8),
       ],
     );
   }
