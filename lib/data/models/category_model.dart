@@ -13,12 +13,23 @@ class CategoryModel {
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
+    int? parseNullableInt(dynamic value) {
+      if (value == null) return null;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
+
+    int parseInt(dynamic value) {
+      return parseNullableInt(value) ?? 0;
+    }
+
     return CategoryModel(
-      categoryId: json['category_id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String?,
+      categoryId: parseInt(json['category_id']),
+      name: json['name']?.toString() ?? 'Unknown',
+      description: json['description']?.toString(),
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
+          ? DateTime.tryParse(json['created_at'].toString())
           : null,
     );
   }

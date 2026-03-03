@@ -47,30 +47,48 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
+    double parseDouble(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
+    int? parseNullableInt(dynamic value) {
+      if (value == null) return null;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
+
+    int parseInt(dynamic value) {
+      return parseNullableInt(value) ?? 0;
+    }
+
     return OrderModel(
-      orderId: json['order_id'] as int,
-      customerId: json['customer_id'] as int,
-      status: json['status'] as String? ?? 'pending',
-      subtotal: (json['subtotal'] as num).toDouble(),
-      taxAmount: (json['tax_amount'] as num).toDouble(),
-      discountAmount: (json['discount_amount'] as num).toDouble(),
-      shippingCost: (json['shipping_cost'] as num).toDouble(),
-      totalAmount: (json['total_amount'] as num).toDouble(),
-      shippingAddressLine1: json['shipping_address_line1'] as String?,
-      shippingAddressLine2: json['shipping_address_line2'] as String?,
-      shippingCity: json['shipping_city'] as String?,
-      shippingStateProvince: json['shipping_state_province'] as String?,
-      shippingPostalCode: json['shipping_postal_code'] as String?,
-      shippingCountry: json['shipping_country'] as String?,
-      paymentMethod: json['payment_method'] as String?,
-      paymentStatus: json['payment_status'] as String?,
-      trackingNumber: json['tracking_number'] as String?,
-      notes: json['notes'] as String?,
+      orderId: parseInt(json['order_id']),
+      customerId: parseInt(json['customer_id']),
+      status: json['status']?.toString() ?? 'pending',
+      subtotal: parseDouble(json['subtotal']),
+      taxAmount: parseDouble(json['tax_amount']),
+      discountAmount: parseDouble(json['discount_amount']),
+      shippingCost: parseDouble(json['shipping_cost']),
+      totalAmount: parseDouble(json['total_amount']),
+      shippingAddressLine1: json['shipping_address_line1']?.toString(),
+      shippingAddressLine2: json['shipping_address_line2']?.toString(),
+      shippingCity: json['shipping_city']?.toString(),
+      shippingStateProvince: json['shipping_state_province']?.toString(),
+      shippingPostalCode: json['shipping_postal_code']?.toString(),
+      shippingCountry: json['shipping_country']?.toString(),
+      paymentMethod: json['payment_method']?.toString(),
+      paymentStatus: json['payment_status']?.toString(),
+      trackingNumber: json['tracking_number']?.toString(),
+      notes: json['notes']?.toString(),
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
+          ? DateTime.tryParse(json['created_at'].toString())
           : null,
       updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'] as String)
+          ? DateTime.tryParse(json['updated_at'].toString())
           : null,
       items: json['order_items'] != null
           ? (json['order_items'] as List)
@@ -153,17 +171,35 @@ class OrderItemModel {
   });
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) {
+    double parseDouble(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
+    int? parseNullableInt(dynamic value) {
+      if (value == null) return null;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
+
+    int parseInt(dynamic value) {
+      return parseNullableInt(value) ?? 0;
+    }
+
     return OrderItemModel(
-      orderItemId: json['order_item_id'] as int,
-      orderId: json['order_id'] as int,
-      productId: json['product_id'] as int,
-      quantity: json['quantity'] as int,
-      unitPrice: (json['unit_price'] as num).toDouble(),
-      discountAmount: (json['discount_amount'] as num).toDouble(),
-      taxAmount: (json['tax_amount'] as num).toDouble(),
-      totalPrice: (json['total_price'] as num).toDouble(),
+      orderItemId: parseInt(json['order_item_id']),
+      orderId: parseInt(json['order_id']),
+      productId: parseInt(json['product_id']),
+      quantity: parseInt(json['quantity']),
+      unitPrice: parseDouble(json['unit_price']),
+      discountAmount: parseDouble(json['discount_amount']),
+      taxAmount: parseDouble(json['tax_amount']),
+      totalPrice: parseDouble(json['total_price']),
       productName: json['products'] != null
-          ? (json['products'] as Map<String, dynamic>)['name'] as String?
+          ? (json['products'] as Map<String, dynamic>)['name']?.toString()
           : null,
     );
   }

@@ -39,31 +39,56 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    double parseDouble(dynamic value) {
+      if (value == null) return 0.0;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? 0.0;
+      return 0.0;
+    }
+
+    double? parseNullableDouble(dynamic value) {
+      if (value == null) return null;
+      if (value is num) return value.toDouble();
+      if (value is String) return double.tryParse(value);
+      return null;
+    }
+
+    int? parseNullableInt(dynamic value) {
+      if (value == null) return null;
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
+
+    int parseInt(dynamic value) {
+      return parseNullableInt(value) ?? 0;
+    }
+
     return ProductModel(
-      productId: json['product_id'] as int,
-      categoryId: json['category_id'] as int?,
-      supplierId: json['supplier_id'] as int?,
-      name: json['name'] as String,
-      description: json['description'] as String?,
-      basePrice: (json['base_price'] as num).toDouble(),
-      costPrice: (json['cost_price'] as num).toDouble(),
-      sku: json['sku'] as String,
-      barcode: json['barcode'] as String?,
-      weight: json['weight'] != null
-          ? (json['weight'] as num).toDouble()
-          : null,
-      dimensions: json['dimensions'] as String?,
-      isActive: json['is_active'] as bool? ?? true,
+      productId: parseInt(json['product_id']),
+      categoryId: parseNullableInt(json['category_id']),
+      supplierId: parseNullableInt(json['supplier_id']),
+      name: json['name']?.toString() ?? 'Unknown',
+      description: json['description']?.toString(),
+      basePrice: parseDouble(json['base_price']),
+      costPrice: parseDouble(json['cost_price']),
+      sku: json['sku']?.toString() ?? '',
+      barcode: json['barcode']?.toString(),
+      weight: parseNullableDouble(json['weight']),
+      dimensions: json['dimensions']?.toString(),
+      isActive: json['is_active'] is bool
+          ? json['is_active'] as bool
+          : (json['is_active']?.toString().toLowerCase() == 'true'),
       createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
+          ? DateTime.tryParse(json['created_at'].toString())
           : null,
       updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'] as String)
+          ? DateTime.tryParse(json['updated_at'].toString())
           : null,
       category: json['categories'] != null
           ? CategoryModel.fromJson(json['categories'] as Map<String, dynamic>)
           : null,
-      imageUrl: json['image_url'] as String?,
+      imageUrl: json['image_url']?.toString(),
     );
   }
 
